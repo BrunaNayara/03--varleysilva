@@ -83,6 +83,16 @@ def alert_that_guess_was_correct(letters_guessed):
 
     print 'Good Guess: ', guessed
 
+def alert_that_guess_was_incorrect(letters_guessed):
+    guessed = get_guessed_word()
+    for letter in secret_word:
+        if letter in letters_guessed:
+            guessed += letter
+        else:
+            guessed += '_ '
+
+    print 'Oops! That letter is not in my word: ',  guessed
+
 
 def hangman(secret_word):
     guesses = 8
@@ -103,31 +113,15 @@ def hangman(secret_word):
 
         elif letter in secret_word:
             letters_guessed.append(letter)
+
             alert_that_guess_was_correct(letters_guessed)
-            # criar um metodo que alerta que o chute foi correto
-            # letters_guessed.append(letter)
 
-            # guessed = get_guessed_word()
-            # for letter in secret_word:
-            #     if letter in letters_guessed:
-            #         guessed += letter
-            #     else:
-            #         guessed += '_ '
-
-            # print 'Good Guess: ', guessed
         else:
-            # criar um metodo que o chute foi incorreto
             guesses -= 1
             letters_guessed.append(letter)
 
-            guessed = get_guessed_word()
-            for letter in secret_word:
-                if letter in letters_guessed:
-                    guessed += letter
-                else:
-                    guessed += '_ '
-
-            print 'Oops! That letter is not in my word: ',  guessed
+            alert_that_guess_was_incorrect(letters_guessed)
+            
         print '------------'
 
     else:
