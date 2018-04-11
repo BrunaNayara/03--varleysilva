@@ -43,7 +43,7 @@ def get_guessed_word():
 
 def remove_guess_from_avaliable_letters(letters_guessed):
     """
-    Remove from avaliable letters the guesseds 
+    Remove from avaliable letters the already guesseds 
     letters.
     """
     available = string.ascii_lowercase
@@ -56,6 +56,9 @@ def remove_guess_from_avaliable_letters(letters_guessed):
 
 
 def alert_that_letter_already_guessed(letters_guessed):
+    """
+    Alert the user that letter already guessed
+    """
     guessed = get_guessed_word()
     for letter in secret_word:
         if letter in letters_guessed:
@@ -66,6 +69,10 @@ def alert_that_letter_already_guessed(letters_guessed):
     print 'Oops! You have already guessed that letter: ', guessed
 
 def alert_that_guess_was_correct(letters_guessed):
+    """
+    Alert the user that letter is in
+    the secret word
+    """
     guessed = get_guessed_word()
     for letter in secret_word:
         if letter in letters_guessed:
@@ -76,6 +83,10 @@ def alert_that_guess_was_correct(letters_guessed):
     print 'Good Guess: ', guessed
 
 def alert_that_guess_was_incorrect(letters_guessed):
+    """
+    Alert the user that letter isn't in
+    the secret word
+    """
     guessed = get_guessed_word()
     for letter in secret_word:
         if letter in letters_guessed:
@@ -87,6 +98,9 @@ def alert_that_guess_was_incorrect(letters_guessed):
 
 
 def hangman(secret_word):
+    """
+    Main function
+    """
     guesses = NUMBER_OF_GUESSES
     letters_guessed = []
     print 'Welcome to the game, Hangam!'
