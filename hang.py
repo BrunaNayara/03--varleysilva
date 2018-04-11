@@ -52,14 +52,26 @@ def get_available_letters():
 
     return available
 
+
 def remove_guess_from_avaliable_letters(letters_guessed):
     available = get_available_letters()
-    
+
     for letter in available:
-            if letter in letters_guessed:
-                available = available.replace(letter, '')
+        if letter in letters_guessed:
+            available = available.replace(letter, '')
 
     print 'Available letters', available
+
+
+def alert_that_guess_was_correct():
+    guessed = get_guessed_word()
+        for letter in secret_word:
+            if letter in letters_guessed:
+                guessed += letter
+            else:
+                guessed += '_ '
+
+        print 'Oops! You have already guessed that letter: ', guessed
 
 
 def hangman(secret_word):
@@ -72,33 +84,23 @@ def hangman(secret_word):
     while is_word_guessed(secret_word, letters_guessed) == False and guesses > 0:
         print 'You have ', guesses, 'guesses left.'
 
-        #fazer um metodo que remove a letra chutada da lista de letras disponiveis
-        # available = get_available_letters()
-
-        # for letter in available:
-        #     if letter in letters_guessed:
-        #         available = available.replace(letter, '')
-
-        # print 'Available letters', available
-
         remove_guess_from_avaliable_letters(letters_guessed)
 
         letter = raw_input('Please guess a letter: ')
 
-       
         if letter in letters_guessed:
-             #criar um metodo para alertar que ja chutou aquela letra
-            guessed = get_guessed_word()
-            for letter in secret_word:
-                if letter in letters_guessed:
-                    guessed += letter
-                else:
-                    guessed += '_ '
+             # criar um metodo para alertar que ja chutou aquela letra
+            # guessed = get_guessed_word()
+            # for letter in secret_word:
+            #     if letter in letters_guessed:
+            #         guessed += letter
+            #     else:
+            #         guessed += '_ '
 
-            print 'Oops! You have already guessed that letter: ', guessed
-        
+            # print 'Oops! You have already guessed that letter: ', guessed
+
         elif letter in secret_word:
-            #criar um metodo que alerta que o chute foi correto 
+            # criar um metodo que alerta que o chute foi correto
             letters_guessed.append(letter)
 
             guessed = get_guessed_word()
@@ -110,7 +112,7 @@ def hangman(secret_word):
 
             print 'Good Guess: ', guessed
         else:
-            #criar um metodo que o chute foi incorreto
+            # criar um metodo que o chute foi incorreto
             guesses -= 1
             letters_guessed.append(letter)
 
