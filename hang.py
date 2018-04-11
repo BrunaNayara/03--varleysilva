@@ -21,6 +21,10 @@ def load_words():
 
 
 def is_word_guessed(secret_word, letters_guessed):
+    """
+    Return boolean informing if the
+    secret word was already completly guessed
+    """
     for letter in secret_word:
         if letter in letters_guessed:
             pass
@@ -37,15 +41,12 @@ def get_guessed_word():
     return guessed
 
 
-def get_available_letters():
-    # 'abcdefghijklmnopqrstuvwxyz'
-    available = string.ascii_lowercase
-
-    return available
-
-
 def remove_guess_from_avaliable_letters(letters_guessed):
-    available = get_available_letters()
+    """
+    Remove from avaliable letters the guesseds 
+    letters.
+    """
+    available = string.ascii_lowercase
 
     for letter in available:
         if letter in letters_guessed:
