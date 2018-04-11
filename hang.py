@@ -2,7 +2,7 @@ import random
 import string
 
 WORDLIST_FILENAME = "palavras.txt"
-
+NUMBER_OF_GUESSES = 8
 
 def load_words():
     """
@@ -21,14 +21,6 @@ def load_words():
 
 
 def is_word_guessed(secret_word, letters_guessed):
-    secretLetters = []
-
-#    for letter in secret_word:
-#        if letter in secretLetters:
-#            secretLetters.append(letter)
-#        else:
-#            pass
-
     for letter in secret_word:
         if letter in letters_guessed:
             pass
@@ -46,7 +38,6 @@ def get_guessed_word():
 
 
 def get_available_letters():
-    import string
     # 'abcdefghijklmnopqrstuvwxyz'
     available = string.ascii_lowercase
 
@@ -95,7 +86,7 @@ def alert_that_guess_was_incorrect(letters_guessed):
 
 
 def hangman(secret_word):
-    guesses = 8
+    guesses = NUMBER_OF_GUESSES
     letters_guessed = []
     print 'Welcome to the game, Hangam!'
     print 'I am thinking of a word that is', len(secret_word), ' letters long.'
