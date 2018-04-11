@@ -64,7 +64,7 @@ def alert_that_letter_already_guessed(letters_guessed):
         if letter in letters_guessed:
             guessed += letter
         else:
-            guessed += '_ '
+            guessed += '_'
 
     print 'Oops! You have already guessed that letter: ', guessed
 
@@ -78,7 +78,7 @@ def alert_that_guess_was_correct(letters_guessed):
         if letter in letters_guessed:
             guessed += letter
         else:
-            guessed += '_ '
+            guessed += '_'
 
     print 'Good Guess: ', guessed
 
@@ -92,7 +92,7 @@ def alert_that_guess_was_incorrect(letters_guessed):
         if letter in letters_guessed:
             guessed += letter
         else:
-            guessed += '_ '
+            guessed += '_'
 
     print 'Oops! That letter is not in my word: ',  guessed
 
@@ -130,11 +130,10 @@ def hangman(secret_word):
             
         print '------------'
 
+    if is_word_guessed(secret_word, letters_guessed) == True:
+        print 'Congratulations, you won!'
     else:
-        if is_word_guessed(secret_word, letters_guessed) == True:
-            print 'Congratulations, you won!'
-        else:
-            print 'Sorry, you ran out of guesses. The word was ', secret_word, '.'
+        print 'Sorry, you ran out of guesses. The word was ', secret_word, '.'
 
 
 secret_word = load_words().lower()
