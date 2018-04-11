@@ -57,7 +57,9 @@ def remove_guess_from_avaliable_letters(letters_guessed):
 
 def alert_that_letter_already_guessed(letters_guessed):
     """
-    Alert the user that letter already guessed
+    Return the letters already guessed from
+    the secret word formated like
+    'a_ a_ _ h'
     """
     guessed = get_guessed_word()
     for letter in secret_word:
