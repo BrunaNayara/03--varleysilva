@@ -2,7 +2,7 @@
 Init the HangmanGame
 """
 
-from hangman import HangmanGame
+from hang import HangmanGame
 
 WORDLIST_FILENAME = "palavras.txt"
 NUMBER_OF_GUESSES = 8
