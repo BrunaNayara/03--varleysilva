@@ -1,142 +1,149 @@
-import random
+""" Hangman Game.
+    The game will choose a random word and
+    the player must guess the letters of this
+    word."""
 import string
+import random
+import logging
+from customError import *
 
-WORDLIST_FILENAME = "palavras.txt"
-NUMBER_OF_GUESSES = 8
+logging.basicConfig(filename='hangman.log', level=logging.DEBUG)
 
-def load_words():
+class HangmanGame(object):
+    """ Class containing variables and
+        methods to access and work with the
+        secret word
     """
-    Depending on the size of the word list, this function may
-    take a while to finish.
-    """
-    print "Loading word list from file..."
-    # inFile: file
-    inFile = open(WORDLIST_FILENAME, 'r', 0)
-    # line: string
-    line = inFile.readline()
-    # wordlist: list of strings
-    wordlist = string.split(line)
-    print "  ", len(wordlist), "words loaded."
-    return random.choice(wordlist)
+
+    def __init__(self, file_name='', number_of_guesses=8):
+
+        self.number_of_guesses = number_of_guesses
+        self.secret_word = ''
+        self.load_words(file_name)
+        self.letters_guessed = []
+        self.available_letters = string.ascii_lowercase
+        
+
+    def check_different_letters(self):
+        """ Returns the number of different letters
+            of the given word
+        """
+        letters = set(self.secret_word)
+        numberOfDiffLetters = len(letters)
+        print "The random choosen word has ", numberOfDiffLetters, "different letters"
+        logging.debug("word: {0}\nSet: {1}\n{2} letters".format(self.secret_word,
+                                                                letters,
+                                                                numberOfDiffLetters))
+        return numberOfDiffLetters
 
 
-def is_word_guessed(secret_word, letters_guessed):
-    """
-    Return boolean informing if the
-    secret word was already completly guessed
-    """
-    for letter in secret_word:
-        if letter in letters_guessed:
-            pass
+    def load_words(self, file_name):
+        """ Load all the words in WORDLIST_FILENAME
+
+            Depending on the size of the word list, this function may
+            take a while to finish.
+        """
+        print "Loading word list from file..."
+        try:
+            in_file = open(file_name, 'r', 0)
+            line = in_file.readline()
+            wordlist = string.split(line)
+            if len(wordlist) <= 0:
+                raise NoWordsError(file_name)
+        except IOError:
+            print """
+FILE NOT FOUND. See https://github.com/TecProg-20181/03--filipetoyoshima
+to find the files and put it on the same directory as hangman.py"""
+            exit()
+        except NoWordsError as e:
+            print e.message
+            exit()
+        print "  ", len(wordlist), "words loaded."
+        self.secret_word = random.choice(wordlist).lower()
+        while self.check_different_letters() > self.number_of_guesses:
+            self.secret_word = random.choice(wordlist).lower()
+            print "This one is too hard, another will be chosen"
+
+
+    def is_word_guessed(self):
+        """ Return boolean acusing if the
+            secret word was already completly guessed
+        """
+        for letter in self.secret_word:
+            if letter in self.letters_guessed:
+                pass
+            else:
+                logging.debug('{0} not guessed'.format(letter))
+                return False
+        logging.debug('all letters guessed!')
+        logging.debug('{0} : {1}'.format(self.secret_word, self.letters_guessed))
+        return True
+
+
+    def update_available_letters(self, letter):
+        """ Return a string with the letters wich user can
+            yet choose.
+        """
+        self.available_letters = self.available_letters.replace(letter, '')
+        logging.debug(self.available_letters)
+
+
+    def already_guessed(self):
+        """ Return the letters already guessed from
+            the secret word formated like
+            'abc_ e_ _ h'
+        """
+        guessed = ''
+        for letter in self.secret_word:
+            if letter in self.letters_guessed:
+                guessed += letter
+            else:
+                guessed += '_ '
+        logging.debug('already guessed: {0}'.format(guessed))
+        return guessed
+
+
+    def start_game(self):
+        """ Main function of the program
+        """
+        print 'Welcome to the game Hangman!'
+        print 'I am thinking of a word that is', len(self.secret_word), ' letters long.'
+        print '-------------'
+
+        while self.is_word_guessed() is False and self.number_of_guesses > 0:
+            print 'You have ', self.number_of_guesses, 'guesses left.'
+            print 'Available letters', self.available_letters
+
+            letter = raw_input('Please guess a letter: ')
+
+            if len(letter) > 1:
+                print 'Please, guess ONLY ONE letter'
+
+            elif len(letter) < 1:
+                print 'This was a blank guess, please guess one letter.'
+
+            elif letter in self.letters_guessed:
+                print 'Oops! You have already guessed that letter: '
+
+            elif letter in self.secret_word:
+                self.letters_guessed.append(letter)
+                self.update_available_letters(letter)
+                print 'Good Guess: '
+
+            elif letter not in self.available_letters:
+                print 'This is not a available guess\nTry again!'
+
+            else:
+                self.number_of_guesses -= 1
+                self.letters_guessed.append(letter)
+                self.update_available_letters(letter)
+                print 'Oops! That letter is not in my word: '
+
+            print self.already_guessed()
+            print '------------'
+
+
+        if self.is_word_guessed():
+            print 'Congratulations, you won!'
         else:
-            return False
-
-    return True
-
-
-def get_guessed_word():
-
-    guessed = ''
-
-    return guessed
-
-
-def remove_guess_from_avaliable_letters(letters_guessed):
-    """
-    Remove from avaliable letters the already guesseds 
-    letters.
-    """
-    available = string.ascii_lowercase
-
-    for letter in available:
-        if letter in letters_guessed:
-            available = available.replace(letter, '')
-
-    print 'Available letters', available
-
-
-def alert_that_letter_already_guessed(letters_guessed):
-    """
-    Return the letters already guessed from
-    the secret word formated like
-    'a_ a_ _ h'
-    """
-    guessed = get_guessed_word()
-    for letter in secret_word:
-        if letter in letters_guessed:
-            guessed += letter
-        else:
-            guessed += '_'
-
-    print 'Oops! You have already guessed that letter: ', guessed
-
-def alert_that_guess_was_correct(letters_guessed):
-    """
-    Alert the user that letter is in
-    the secret word
-    """
-    guessed = get_guessed_word()
-    for letter in secret_word:
-        if letter in letters_guessed:
-            guessed += letter
-        else:
-            guessed += '_'
-
-    print 'Good Guess: ', guessed
-
-def alert_that_guess_was_incorrect(letters_guessed):
-    """
-    Alert the user that letter isn't in
-    the secret word
-    """
-    guessed = get_guessed_word()
-    for letter in secret_word:
-        if letter in letters_guessed:
-            guessed += letter
-        else:
-            guessed += '_'
-
-    print 'Oops! That letter is not in my word: ',  guessed
-
-
-def hangman(secret_word):
-    """
-    Main function
-    """
-    guesses = NUMBER_OF_GUESSES
-    letters_guessed = []
-    print 'Welcome to the game, Hangam!'
-    print 'I am thinking of a word that is', len(secret_word), ' letters long.'
-    print '-------------'
-
-    while is_word_guessed(secret_word, letters_guessed) == False and guesses > 0:
-        print 'You have ', guesses, 'guesses left.'
-
-        remove_guess_from_avaliable_letters(letters_guessed)
-
-        letter = raw_input('Please guess a letter: ')
-
-        if letter in letters_guessed:
-            alert_that_letter_already_guessed(letters_guessed)
-
-        elif letter in secret_word:
-            letters_guessed.append(letter)
-
-            alert_that_guess_was_correct(letters_guessed)
-
-        else:
-            guesses -= 1
-            letters_guessed.append(letter)
-
-            alert_that_guess_was_incorrect(letters_guessed)
-            
-        print '------------'
-
-    if is_word_guessed(secret_word, letters_guessed) == True:
-        print 'Congratulations, you won!'
-    else:
-        print 'Sorry, you ran out of guesses. The word was ', secret_word, '.'
-
-
-secret_word = load_words().lower()
-hangman(secret_word)
+            print 'Sorry, you ran out of guesses. The word was ', self.secret_word, '.'
